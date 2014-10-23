@@ -24,6 +24,10 @@ You can set a keyboard shortcut in System Preferences.
 
 If you use it with a lot of text, the plugin can slow down the app significantly. So, I advise to only use it with small bits of text, perhaps one or two words.
 
+### Requirements
+
+The plugin needs Glyphs 1.4.3 or higher, running on OS X 10.7 or later. I can only test it in current OS versions, and I assume it will not work in versions of Mac OS X older than 10.7.
+
 ### License
 
 Copyright 2014 Rainer Erich Scheichelbauer (@mekkablue).
