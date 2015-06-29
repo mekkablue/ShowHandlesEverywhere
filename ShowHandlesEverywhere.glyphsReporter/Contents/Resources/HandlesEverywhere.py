@@ -98,29 +98,39 @@ class HandlesEverywhere ( NSObject, GlyphsReporterProtocol ):
 		except Exception as e:
 			self.logToConsole( "drawForegroundForLayer_: %s" % str(e) )
 	
+	def drawHandlesAndNodes( self, thisLayer ):
+		"""docstring for drawHandlesAndNodes"""
+		try:
+			scaleDown = 0.5
+			NodeSize = self.getHandleSize()
+			Scale = self.getScale()
+			circleRadius = (NodeSize / Scale) * scaleDown
+			handleStroke = scaleDown / Scale
+						
+			# Off-curve nodes:
+			NSColor.lightGrayColor().set()
+			handleList = self.listOfHandles( thisLayer )
+			self.drawLinesBetweenNodePairs( handleList, handleStroke )
+			self.drawCirclesAtSize( [p[1] for p in handleList], circleRadius )
+
+			# On-curve nodes:
+			self.drawCirclesAtSize( self.listOfNodes( thisLayer ), circleRadius )
+
+		except Exception as e:
+			self.logToConsole( "drawHandlesAndNodes: %s" % str(e) )
+			
 	def drawBackgroundForLayer_( self, Layer ):
 		"""
 		Whatever you draw here will be displayed BEHIND the paths.
 		"""
 		try:
 			background = Layer.background
-			
 			if type(background) == GSBackgroundLayer and Glyphs.defaults["showBackground"]:
-				scaleDown = 0.5
-				NodeSize = self.getHandleSize()
-				Scale = self.getScale()
-				circleRadius = (NodeSize / Scale) * scaleDown
-				handleStroke = scaleDown / Scale
-							
-				# Off-curve nodes:
-				NSColor.lightGrayColor().set()
-				handleList = self.listOfHandles( background )
-				self.drawLinesBetweenNodePairs( handleList, handleStroke )
-				self.drawCirclesAtSize( [p[1] for p in handleList], circleRadius )
-
-				# On-curve nodes:
-				self.drawCirclesAtSize( self.listOfNodes( background ), circleRadius )
+				self.drawHandlesAndNodes( background )
 			
+			thisGlyph = Layer.parent
+			for thisLayer in [ l for l in thisGlyph.layers if l != Layer and l.visible() == 1 ]:
+				self.drawHandlesAndNodes( thisLayer )
 		except Exception as e:
 			self.logToConsole( "drawBackgroundForLayer_: %s" % str(e) )
 	

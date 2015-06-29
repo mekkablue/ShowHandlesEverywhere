@@ -1,6 +1,6 @@
 # ShowHandlesEverywhere.glyphsReporter
 
-This is a plugin for the [Glyphs font editor](http://glyphsapp.com/) by Georg Seifert. It displays handles for paths in the background, as well as in inactive glyphs surrounding the current glyph.
+This is a plugin for the [Glyphs font editor](http://glyphsapp.com/) by Georg Seifert. It displays handles for paths in the background (if *View > Show Background* is on), on other layers (if the layer is set to visible) as well as in inactive glyphs surrounding the current glyph (if *View > Fill Preview* is off).
 
 After installation, it will add the menu item *View > Show Handles Everywhere*.
 You can set a keyboard shortcut in System Preferences.
@@ -17,8 +17,9 @@ You can set a keyboard shortcut in System Preferences.
 
 1. Open a glyph in Edit View.
 2. Use *View > Show Handles Everywhere* to toggle the display of coordinates for selected nodes.
-3. Turn on *View > Show Background* if you want to see handles in the background paths.
+3. Turn on *View > Show Background* (Cmd-Shift-B) if you want to see handles in the background paths.
 4. Turn off *View > Fill Preview* to show handles in the surrounding glyphs in Edit view.
+5. Turn on visibility of other layers you want to view with the eye symbols in the *Layers* palette (Cmd-Opt-P).
 
 ### Known Problems
 
