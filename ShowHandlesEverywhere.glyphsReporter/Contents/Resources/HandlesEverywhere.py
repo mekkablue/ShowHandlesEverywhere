@@ -291,7 +291,7 @@ class HandlesEverywhere ( NSObject, GlyphsReporterProtocol ):
 		try:
 			return self.controller.graphicView().scale()
 		except:
-			self.logToConsole( "Scale defaulting to 1.0" )
+			# self.logToConsole( "Scale defaulting to 1.0" )
 			return 1.0
 	
 	def setController_( self, Controller ):

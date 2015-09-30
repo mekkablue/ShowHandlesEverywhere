@@ -1,6 +1,6 @@
 # ShowHandlesEverywhere.glyphsReporter
 
-This is a plugin for the [Glyphs font editor](http://glyphsapp.com/) by Georg Seifert. It displays handles for paths in the background (if *View > Show Background* is on), on other layers (if the layer is set to visible) as well as in inactive glyphs surrounding the current glyph (if *View > Fill Preview* is off).
+This is a plugin for the [Glyphs font editor](http://glyphsapp.com/) by Georg Seifert. It displays **nodes & handles** for paths **in the background** (if *View > Show Background* is on), **on other layers** (if the layer is set to visible) as well as **in inactive glyphs** surrounding the current glyph (if *View > Fill Preview* is off).
 
 After installation, it will add the menu item *View > Show Handles Everywhere*.
 You can set a keyboard shortcut in System Preferences.
