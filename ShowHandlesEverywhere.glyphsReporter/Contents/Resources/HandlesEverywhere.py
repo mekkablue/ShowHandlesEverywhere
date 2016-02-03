@@ -12,6 +12,7 @@ if not path in sys.path:
 	sys.path.append( path )
 
 import GlyphsApp
+from GlyphsApp import GSOFFCURVE
 Glyphs = NSApplication.sharedApplication()
 
 GlyphsReporterProtocol = objc.protocolNamed( "GlyphsReporter" )
@@ -73,26 +74,6 @@ class HandlesEverywhere ( NSObject, GlyphsReporterProtocol ):
 			self.logToConsole( "modifierMask: %s" % str(e) )
 	
 	def drawForegroundForLayer_( self, Layer ):
-		"""
-		Whatever you draw here will be displayed IN FRONT OF the paths.
-		Setting a color:
-			NSColor.colorWithCalibratedRed_green_blue_alpha_( 1.0, 1.0, 1.0, 1.0 ).set() # sets RGBA values between 0.0 and 1.0
-			NSColor.redColor().set() # predefined colors: blackColor, blueColor, brownColor, clearColor, cyanColor, darkGrayColor, grayColor, greenColor, lightGrayColor, magentaColor, orangeColor, purpleColor, redColor, whiteColor, yellowColor
-		Drawing a path:
-			myPath = NSBezierPath.alloc().init()  # initialize a path object myPath
-			myPath.appendBezierPath_( subpath )   # add subpath to myPath
-			myPath.fill()   # fill myPath with the current NSColor
-			myPath.stroke() # stroke myPath with the current NSColor
-		To get an NSBezierPath from a GSPath, use the bezierPath() method:
-			myPath.bezierPath().fill()
-		You can apply that to a full layer at once:
-			if len( myLayer.paths > 0 ):
-				myLayer.bezierPath()       # all closed paths
-				myLayer.openBezierPath()   # all open paths
-		See:
-		https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/Reference/Reference.html
-		https://developer.apple.com/library/mac/documentation/cocoa/reference/applicationkit/classes/NSColor_Class/Reference/Reference.html
-		"""
 		try:
 			pass
 		except Exception as e:
@@ -233,11 +214,11 @@ class HandlesEverywhere ( NSObject, GlyphsReporterProtocol ):
 					prevNode = thisPath.nodes[ i-1 ]
 					nextNode = thisPath.nodes[ i+1 ]
 				
-					if thisNode.type == 65:
+					if thisNode.type == GSOFFCURVE:
 						# a selected off-curve
-						if prevNode.type != 65:
+						if prevNode.type != GSOFFCURVE:
 							returnList.append( (prevNode, thisNode) )
-						elif nextNode.type != 65:
+						elif nextNode.type != GSOFFCURVE:
 							returnList.append( (nextNode, thisNode) )
 
 			return returnList
