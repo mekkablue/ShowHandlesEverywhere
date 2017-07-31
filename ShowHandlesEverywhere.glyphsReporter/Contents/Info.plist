@@ -17,15 +17,15 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>9</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>UpdateFeedURL</key>
 	<string>https://raw.githubusercontent.com/mekkablue/ShowHandlesEverywhere/master/ShowHandlesEverywhere.glyphsReporter/Contents/Info.plist</string>
 	<key>productPageURL</key>
 	<string>https://github.com/mekkablue/ShowHandlesEverywhere</string>
 	<key>productReleaseNotes</key>
-	<string>New Code Base; now indicates selections; fixed "display lag" (thx JFP)</string>
+	<string>Fixes master layer centering, draws handles in layer color if available (thx JFP)</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Rainer Erich Scheichelbauer, 2017</string>
 	<key>NSPrincipalClass</key>

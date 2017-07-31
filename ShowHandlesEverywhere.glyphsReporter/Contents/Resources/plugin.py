@@ -32,11 +32,26 @@ class ShowHandlesEverywhere(ReporterPlugin):
 				background = layer.background
 			self.drawHandlesAndNodes( background )
 		
+		# determine current tool
+		try:
+			toolClass = Glyphs.currentDocument.windowController().toolEventHandler().className()
+		except:
+			toolClass = None
+		
 		# draw visible layers:
-		thisGlyph = layer.parent
-		for thisLayer in thisGlyph.layers:
-			if thisLayer != layer and thisLayer.visible():
-				self.drawHandlesAndNodes( thisLayer )
+		if toolClass != "GlyphsToolSelectAllLayers":
+			layerCenter = layer.width/2
+			thisGlyph = layer.parent
+			for thisLayer in thisGlyph.layers:
+				if thisLayer != layer and thisLayer.visible():
+					# determine layer color:
+					drawColor = thisLayer.colorObject
+					if not drawColor:
+						drawColor = NSColor.lightGrayColor()
+				
+					# center layer drawings:
+					horizontalMove = layerCenter - thisLayer.width/2
+					self.drawHandlesAndNodes( thisLayer, color=drawColor, shift=horizontalMove )
 	
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, layer ):
 			return True
@@ -46,28 +61,30 @@ class ShowHandlesEverywhere(ReporterPlugin):
 			scaleDown = 0.7
 			self.drawHandlesAndNodes( layer, scaleDown=scaleDown )
 	
-	def drawHandlesAndNodes( self, thisLayer, scaleDown=0.5 ):
+	def drawHandlesAndNodes( self, thisLayer, scaleDown=0.5, color=NSColor.lightGrayColor(), shift=0.0 ):
 		handleStroke = scaleDown / self.getScale()
-		NSColor.lightGrayColor().set()
+		color.set()
 		for thisPath in thisLayer.paths:
 			for thisNode in thisPath.nodes:
 				# draw handle sticks:
 				if thisNode.type == OFFCURVE:
 					if thisNode.prevNode.type != OFFCURVE:
-						self.drawLineBetweenNodes( thisNode, thisNode.prevNode, handleStroke )
+						self.drawLineBetweenNodes( thisNode, thisNode.prevNode, handleStroke, shift=shift )
 					else:
-						self.drawLineBetweenNodes( thisNode, thisNode.nextNode, handleStroke )
+						self.drawLineBetweenNodes( thisNode, thisNode.nextNode, handleStroke, shift=shift )
 				# draw node circles:
-				self.drawCircleForNode( thisNode, factor=scaleDown )
+				self.drawCircleForNode( thisNode, factor=scaleDown, shift=shift )
 
-	def drawLineBetweenNodes( self, p1, p2, handleStrokeWidth ):
+	def drawLineBetweenNodes( self, Node1, Node2, handleStrokeWidth, shift=0.0 ):
+		p1 = NSPoint( Node1.x+shift, Node1.y )
+		p2 = NSPoint( Node2.x+shift, Node2.y )
 		lineToBeDrawn = NSBezierPath.alloc().init()
 		lineToBeDrawn.setLineWidth_( handleStrokeWidth )
-		lineToBeDrawn.moveToPoint_( p1.position )
-		lineToBeDrawn.lineToPoint_( p2.position )
+		lineToBeDrawn.moveToPoint_( p1 )
+		lineToBeDrawn.lineToPoint_( p2 )
 		lineToBeDrawn.stroke()
 			
-	def drawCircleForNode(self, node, factor=1.0):
+	def drawCircleForNode(self, node, factor=1.0, shift=0.0 ):
 		# calculate handle size:
 		handleSizes = (5, 8, 12) # possible user settings
 		handleSizeIndex = Glyphs.handleSize # user choice in Glyphs > Preferences > User Preferences > Handle Size
@@ -87,7 +104,7 @@ class ShowHandlesEverywhere(ReporterPlugin):
 		# draw disc inside a rectangle around point position:
 		position = node.position
 		rect = NSRect()
-		rect.origin = NSPoint(position.x-handleSize/2, position.y-handleSize/2)
+		rect.origin = NSPoint(position.x-handleSize/2+shift, position.y-handleSize/2)
 		rect.size = NSSize(handleSize, handleSize)
 		NSBezierPath.bezierPathWithOvalInRect_(rect).fill()
 	
