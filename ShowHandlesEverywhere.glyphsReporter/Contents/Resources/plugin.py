@@ -26,7 +26,7 @@ class ShowHandlesEverywhere(ReporterPlugin):
 	def background(self, layer):
 		# background of layer, or foreground of background layer:
 		if Glyphs.defaults["showBackground"]:
-			if type(layer) == GSBackgroundLayer:
+			if "GSBackgroundLayer" in str(type(layer)):
 				background = layer.foreground()
 			else:
 				background = layer.background
@@ -64,7 +64,17 @@ class ShowHandlesEverywhere(ReporterPlugin):
 	def drawHandlesAndNodes( self, thisLayer, scaleDown=0.5, color=NSColor.lightGrayColor(), shift=0.0 ):
 		handleStroke = scaleDown / self.getScale()
 		color.set()
-		for thisPath in thisLayer.paths:
+		paths = []
+		paths.extend(thisLayer.paths)
+		
+		# add paths of components:
+		for thisComponent in thisLayer.components:
+			transformation = thisComponent.transformStruct()
+			componentLayer = thisComponent.componentLayer().copy()
+			componentLayer.applyTransform(transformation)
+			paths.extend(componentLayer.paths) 
+		
+		for thisPath in paths:
 			for thisNode in thisPath.nodes:
 				# draw handle sticks:
 				if thisNode.type == OFFCURVE:
