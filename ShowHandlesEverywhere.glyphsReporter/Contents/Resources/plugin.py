@@ -25,36 +25,39 @@ class ShowHandlesEverywhere(ReporterPlugin):
 		
 	def background(self, layer):
 		# background of layer, or foreground of background layer:
-		if Glyphs.defaults["showBackground"]:
-			if "GSBackgroundLayer" in str(type(layer)):
-				background = layer.foreground()
-			else:
-				background = layer.background
-			self.drawHandlesAndNodes( background )
+		if Glyphs.defaults["showNodes"]:
+			
+			# draw handles in background:
+			if Glyphs.defaults["showBackground"] and not Glyphs.defaults["showNodesInBackground"]:
+				if "GSBackgroundLayer" in str(type(layer)):
+					background = layer.foreground()
+				else:
+					background = layer.background
+				self.drawHandlesAndNodes( background )
+			
+			# determine current tool (must not draw with Select All Layers tool):
+			try:
+				toolClass = Glyphs.currentDocument.windowController().toolEventHandler().className()
+			except:
+				toolClass = None
 		
-		# determine current tool
-		try:
-			toolClass = Glyphs.currentDocument.windowController().toolEventHandler().className()
-		except:
-			toolClass = None
-		
-		# draw visible layers:
-		if toolClass != "GlyphsToolSelectAllLayers":
-			layerCenter = layer.width/2
-			thisGlyph = layer.parent
-			for thisLayer in thisGlyph.layers:
-				if thisLayer != layer and thisLayer.visible():
-					# determine layer color:
-					drawColor = thisLayer.colorObject
-					if not drawColor:
-						drawColor = NSColor.lightGrayColor()
+			# draw handles in visible layers:
+			if toolClass != "GlyphsToolSelectAllLayers":
+				layerCenter = layer.width/2
+				thisGlyph = layer.parent
+				for thisLayer in thisGlyph.layers:
+					if thisLayer != layer and thisLayer.visible():
+						# determine layer color:
+						drawColor = thisLayer.colorObject
+						if not drawColor:
+							drawColor = NSColor.lightGrayColor()
 				
-					# center layer drawings:
-					horizontalMove = layerCenter - thisLayer.width/2
-					self.drawHandlesAndNodes( thisLayer, color=drawColor, shift=horizontalMove )
+						# center layer drawings:
+						horizontalMove = layerCenter - thisLayer.width/2
+						self.drawHandlesAndNodes( thisLayer, color=drawColor, shift=horizontalMove )
 	
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, layer ):
-			return True
+		return True
 			
 	def inactiveLayers( self, layer ):
 		if not Glyphs.defaults["fillPreview"]:
@@ -62,28 +65,29 @@ class ShowHandlesEverywhere(ReporterPlugin):
 			self.drawHandlesAndNodes( layer, scaleDown=scaleDown )
 	
 	def drawHandlesAndNodes( self, thisLayer, scaleDown=0.5, color=NSColor.lightGrayColor(), shift=0.0 ):
-		handleStroke = scaleDown / self.getScale()
-		color.set()
-		paths = []
-		paths.extend(thisLayer.paths)
+		if Glyphs.defaults["showNodes"]:
+			handleStroke = scaleDown / self.getScale()
+			color.set()
+			paths = []
+			paths.extend(thisLayer.paths)
 		
-		# add paths of components:
-		for thisComponent in thisLayer.components:
-			transformation = thisComponent.transformStruct()
-			componentLayer = thisComponent.componentLayer().copy()
-			componentLayer.applyTransform(transformation)
-			paths.extend(componentLayer.paths) 
+			# add paths of components:
+			for thisComponent in thisLayer.components:
+				transformation = thisComponent.transformStruct()
+				componentLayer = thisComponent.componentLayer().copy()
+				componentLayer.applyTransform(transformation)
+				paths.extend(componentLayer.paths) 
 		
-		for thisPath in paths:
-			for thisNode in thisPath.nodes:
-				# draw handle sticks:
-				if thisNode.type == OFFCURVE:
-					if thisNode.prevNode.type != OFFCURVE:
-						self.drawLineBetweenNodes( thisNode, thisNode.prevNode, handleStroke, shift=shift )
-					else:
-						self.drawLineBetweenNodes( thisNode, thisNode.nextNode, handleStroke, shift=shift )
-				# draw node circles:
-				self.drawCircleForNode( thisNode, factor=scaleDown, shift=shift )
+			for thisPath in paths:
+				for thisNode in thisPath.nodes:
+					# draw handle sticks:
+					if thisNode.type == OFFCURVE:
+						if thisNode.prevNode.type != OFFCURVE:
+							self.drawLineBetweenNodes( thisNode, thisNode.prevNode, handleStroke, shift=shift )
+						else:
+							self.drawLineBetweenNodes( thisNode, thisNode.nextNode, handleStroke, shift=shift )
+					# draw node circles:
+					self.drawCircleForNode( thisNode, factor=scaleDown, shift=shift )
 
 	def drawLineBetweenNodes( self, Node1, Node2, handleStrokeWidth, shift=0.0 ):
 		p1 = NSPoint( Node1.x+shift, Node1.y )
