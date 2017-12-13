@@ -70,14 +70,14 @@ class ShowHandlesEverywhere(ReporterPlugin):
 			color.set()
 			paths = []
 			paths.extend(thisLayer.paths)
-		
+			layers = []
 			# add paths of components:
 			for thisComponent in thisLayer.components:
 				transformation = thisComponent.transformStruct()
 				componentLayer = thisComponent.componentLayer().copy()
 				componentLayer.applyTransform(transformation)
 				paths.extend(componentLayer.paths) 
-		
+				layers.append(componentLayer)
 			for thisPath in paths:
 				for thisNode in thisPath.nodes:
 					# draw handle sticks:
