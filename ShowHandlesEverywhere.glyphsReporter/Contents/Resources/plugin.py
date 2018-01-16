@@ -11,7 +11,7 @@
 #
 ###########################################################################################################
 
-
+from GlyphsApp import OFFCURVE
 from GlyphsApp.plugins import *
 
 class ShowHandlesEverywhere(ReporterPlugin):
@@ -24,11 +24,13 @@ class ShowHandlesEverywhere(ReporterPlugin):
 		})
 		
 	def background(self, layer):
+		thisFont = layer.parent.parent
+		
 		# background of layer, or foreground of background layer:
 		if Glyphs.defaults["showNodes"]:
 			
 			# draw handles in background:
-			if Glyphs.defaults["showBackground"] and not Glyphs.defaults["showNodesInBackground"]:
+			if Glyphs.defaults["showBackground"] and not Glyphs.defaults["showNodesInBackground"] and thisFont.tool != "TextTool":
 				if "GSBackgroundLayer" in str(type(layer)):
 					background = layer.foreground()
 				else:
@@ -36,6 +38,7 @@ class ShowHandlesEverywhere(ReporterPlugin):
 				self.drawHandlesAndNodes( background )
 			
 			# determine current tool (must not draw with Select All Layers tool):
+			# Font.tool cannot differentiate between Select and SelectAllLayers
 			try:
 				toolClass = Glyphs.currentDocument.windowController().toolEventHandler().className()
 			except:
