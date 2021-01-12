@@ -3,9 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDisplayName</key>
-	<string>ShowHandlesEverywhere</string>
+	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>plugin</string>
 	<key>CFBundleIdentifier</key>
@@ -14,25 +12,23 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>ShowHandlesEverywhere</string>
-	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.5</string>
+	<string>1.3</string>
 	<key>CFBundleVersion</key>
-	<string>14</string>
+	<string>15</string>
+	<key>UpdateFeedURL</key>
+	<string>https://raw.githubusercontent.com/mekkablue/ShowHandlesEverywhere/master/ShowHandlesEverywhere.glyphsReporter/Contents/Info.plist</string>
+	<key>productPageURL</key>
+	<string>https://github.com/mekkablue/ShowHandlesEverywhere</string>
+	<key>productReleaseNotes</key>
+	<string>Update Info.plist for Glyphs3</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Rainer Erich Scheichelbauer, 2017</string>
 	<key>NSPrincipalClass</key>
 	<string>ShowHandlesEverywhere</string>
 	<key>PyMainFileNames</key>
 	<array>
-		<string>../MacOS/main.py</string>
+		<string>plugin.py</string>
 	</array>
-	<key>UpdateFeedURL</key>
-	<string>https://raw.githubusercontent.com/mekkablue/ShowHandlesEverywhere/master/ShowHandlesEverywhere.glyphsReporter/Contents/Info.plist</string>
-	<key>productPageURL</key>
-	<string>https://github.com/mekkablue/ShowHandlesEverywhere</string>
-	<key>productReleaseNotes</key>
-	<string>update binary files for Glyphs3</string>
 </dict>
 </plist>
