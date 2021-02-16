@@ -13,16 +13,17 @@
 
 from GlyphsApp import OFFCURVE
 from GlyphsApp.plugins import *
+from AppKit import NSBezierPath, NSPoint, NSSize, NSRect, NSColor
 
 class ShowHandlesEverywhere(ReporterPlugin):
-
+	@objc.python_method
 	def settings(self):
 		self.menuName = Glyphs.localize({
 			'en': u'Handles Everywhere', 
 			'de': u'Anfasser überall', 
 			'fr': u'les poignées n’importe où'
 		})
-		
+	@objc.python_method
 	def background(self, layer):
 		thisFont = layer.parent.parent
 		
@@ -59,14 +60,17 @@ class ShowHandlesEverywhere(ReporterPlugin):
 						horizontalMove = layerCenter - thisLayer.width/2
 						self.drawHandlesAndNodes( thisLayer, color=drawColor, shift=horizontalMove )
 	
+	@objc.python_method
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, layer ):
 		return True
-			
+	
+	@objc.python_method		
 	def inactiveLayers( self, layer ):
 		if not Glyphs.defaults["fillPreview"]:
 			scaleDown = 0.7
 			self.drawHandlesAndNodes( layer, scaleDown=scaleDown )
 	
+	@objc.python_method
 	def drawHandlesAndNodes( self, thisLayer, scaleDown=0.5, color=NSColor.lightGrayColor(), shift=0.0 ):
 		if Glyphs.defaults["showNodes"]:
 			handleStroke = scaleDown / self.getScale()
@@ -91,7 +95,8 @@ class ShowHandlesEverywhere(ReporterPlugin):
 							self.drawLineBetweenNodes( thisNode, thisNode.nextNode, handleStroke, shift=shift )
 					# draw node circles:
 					self.drawCircleForNode( thisNode, factor=scaleDown, shift=shift )
-
+	
+	@objc.python_method
 	def drawLineBetweenNodes( self, Node1, Node2, handleStrokeWidth, shift=0.0 ):
 		p1 = NSPoint( Node1.x+shift, Node1.y )
 		p2 = NSPoint( Node2.x+shift, Node2.y )
@@ -100,7 +105,8 @@ class ShowHandlesEverywhere(ReporterPlugin):
 		lineToBeDrawn.moveToPoint_( p1 )
 		lineToBeDrawn.lineToPoint_( p2 )
 		lineToBeDrawn.stroke()
-			
+	
+	@objc.python_method		
 	def drawCircleForNode(self, node, factor=1.0, shift=0.0 ):
 		# calculate handle size:
 		handleSizes = (5, 8, 12) # possible user settings
