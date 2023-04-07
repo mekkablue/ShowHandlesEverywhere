@@ -1,3 +1,6 @@
+⚠️ Note: This plug-in is deprecated for Glyphs 3. Better use the built-in View > Show Nodes > In Background.
+
+
 # ShowHandlesEverywhere.glyphsReporter
 
 This is a plugin for the [Glyphs font editor](http://glyphsapp.com/) by Georg Seifert. It displays **nodes & handles** for paths **in the background** (if *View > Show Background* is on), **on other layers** (if the layer is set to visible) as well as **in inactive glyphs** surrounding the current glyph (if *View > Fill Preview* is off).
